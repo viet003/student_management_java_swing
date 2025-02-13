@@ -15,7 +15,7 @@ public class Subject implements Serializable {
 
     private int id;
     private String subjectName;
-    private int accredit;
+    private String accredit;
     private double price;
     private String status;
 
@@ -23,7 +23,7 @@ public class Subject implements Serializable {
     public Subject() {
     }
 
-    public Subject(int id, String subjectName, int accredit, double price, String status) {
+    public Subject(int id, String subjectName, String accredit, double price, String status) {
         this.id = id;
         this.subjectName = subjectName;
         this.accredit = accredit;
@@ -48,11 +48,11 @@ public class Subject implements Serializable {
         this.subjectName = subjectName;
     }
 
-    public int getAccredit() {
+    public String getAccredit() {
         return accredit;
     }
 
-    public void setAccredit(int accredit) {
+    public void setAccredit(String accredit) {
         this.accredit = accredit;
     }
 

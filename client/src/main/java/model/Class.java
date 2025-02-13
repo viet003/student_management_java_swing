@@ -1,9 +1,4 @@
 package model;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 
 import java.io.Serializable;
 
@@ -18,20 +13,27 @@ public class Class implements Serializable {
     private int course_id;
     private int teacher_id;
     private int subject_id;
+    private String courseName; // Thêm thuộc tính course_name
+    private String teacherName; // Thêm thuộc tính teacherName
+    private String subjectName; // Thêm thuộc tính subjectName
 
-    // Constructor, Getters and Setters
+    // Constructor mặc định
     public Class() {
     }
 
-    public Class(int id, String className, int course_id, int teacher_id, int subject_id) {
+    // Constructor với tất cả các thuộc tính
+    public Class(int id, String className, int course_id, int teacher_id, int subject_id, String courseName, String teacherName, String subjectName) {
         this.id = id;
         this.className = className;
         this.course_id = course_id;
         this.teacher_id = teacher_id;
         this.subject_id = subject_id;
+        this.courseName = courseName;
+        this.teacherName = teacherName;
+        this.subjectName = subjectName;
     }
-    // Getters and setters...
 
+    // Getters and setters...
     public int getId() {
         return id;
     }
@@ -68,8 +70,31 @@ public class Class implements Serializable {
         return subject_id;
     }
 
-    public void setSubject(int subject_id) {
+    public void setSubjectId(int subject_id) {
         this.subject_id = subject_id;
     }
-    
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
 }

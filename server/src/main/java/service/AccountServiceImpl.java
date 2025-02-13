@@ -54,15 +54,14 @@ public class AccountServiceImpl extends UnicastRemoteObject implements AccountSe
 
     @Override
     public boolean updateAccount(Account account) throws RemoteException {
-        String sql = "UPDATE tbl_account SET email = ?, password = ?, role_id = ?, teacher_id = ? WHERE id = ?";
+        String sql = "UPDATE tbl_account SET email = ?, password = ?, role_id = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, account.getEmail());
             stmt.setString(2, account.getPassword());
             stmt.setInt(3, account.getRoleId());
-            stmt.setInt(4, account.getTeacherId());
-            stmt.setInt(5, account.getId());
+            stmt.setInt(4, account.getId());
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0; // Trả về true nếu cập nhật thành công
         } catch (SQLException e) {

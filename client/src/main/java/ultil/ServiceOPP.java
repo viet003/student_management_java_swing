@@ -13,10 +13,20 @@ import views.model.ComboItem;
  */
 public class ServiceOPP {
 
-    public static void selectComboBoxItem(JComboBox<ComboItem> comboBox, int id) {
+    public static void selectComboBoxItemByID(JComboBox<ComboItem> comboBox, int id) {
         for (int i = 0; i < comboBox.getItemCount(); i++) {
             ComboItem item = comboBox.getItemAt(i);
             if (item.getId() == id) {
+                comboBox.setSelectedItem(item);
+                break;
+            }
+        }
+    }
+    
+        public static void selectComboBoxItemByNanme(JComboBox<ComboItem> comboBox, String name) {
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            ComboItem item = comboBox.getItemAt(i);
+            if (item.getName() == name) {
                 comboBox.setSelectedItem(item);
                 break;
             }

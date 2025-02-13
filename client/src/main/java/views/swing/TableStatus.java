@@ -1,4 +1,5 @@
 package views.swing;
+
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -21,8 +22,10 @@ public class TableStatus extends JLabel {
 
     public void setType(StatusType type) {
         this.type = type;
-        setText(type.toString());
-        repaint();
+        if (type != null) { // Kiểm tra xem type có null không để tránh lỗi NullPointerException
+            setText(type.toString());
+            repaint();
+        }
     }
 
     @Override

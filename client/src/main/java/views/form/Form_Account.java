@@ -8,7 +8,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -115,7 +114,7 @@ public class Form_Account extends javax.swing.JPanel {
         if (keyword.isEmpty()) {
             sorter.setRowFilter(null); // Hiển thị toàn bộ dữ liệu nếu ô tìm kiếm rỗng
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 1)); // Lọc dữ liệu theo cột thứ 2 (cột tên vai trò)
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 1)); // Lọc theo cột thứ 2 (cột tên giảng viên)
         }
     }
 
@@ -193,7 +192,7 @@ public class Form_Account extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Tài khoản", "Mật khẩu", "Chức vụ", "Tên người dùng"
+                "ID", "Tài khoản", "Chức vụ", "Tên người dùng"
             }
         ));
         table1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -392,6 +391,8 @@ public class Form_Account extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Thêm tài khoản thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 reLoadText(); // Xóa nội dung nhập
                 loadAccounts(); // Cập nhật danh sách tài khoản
+                loadRolesToComboBox();
+                loadTeachersToComboBox();
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm tài khoản thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
@@ -424,14 +425,6 @@ public class Form_Account extends javax.swing.JPanel {
             ComboItem selectedRole = (ComboItem) cb_role.getSelectedItem();
             int roleId = selectedRole.getId();
 
-            // Kiểm tra xem đã chọn Teacher hay chưa
-            if (cb_teacher.getSelectedItem() == null) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn giảng viên!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            ComboItem selectedTeacher = (ComboItem) cb_teacher.getSelectedItem();
-            int teacherId = selectedTeacher.getId();
-
             // Kiểm tra email và mật khẩu không được rỗng
             if (email.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Email và mật khẩu không được để trống!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
@@ -439,14 +432,16 @@ public class Form_Account extends javax.swing.JPanel {
             }
 
             // Tạo đối tượng Account để cập nhật
-            Account updatedAccount = new Account(id, email, password, roleId, teacherId);
-
+            Account updatedAccount = new Account(id, email, password, roleId, 1);
+            
             // Gửi yêu cầu cập nhật
             boolean success = accountService.updateAccount(updatedAccount);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 reLoadText();
                 loadAccounts();
+                loadRolesToComboBox();
+                loadTeachersToComboBox();
             } else {
                 JOptionPane.showMessageDialog(this, "Cập nhật thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
@@ -473,7 +468,10 @@ public class Form_Account extends javax.swing.JPanel {
                 boolean success = accountService.deleteAccount(id);
                 if (success) {
                     JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    loadAccounts(); // Cập nhật lại danh sách
+                    reLoadText();
+                    loadAccounts();
+                    loadRolesToComboBox();
+                    loadTeachersToComboBox();
                 } else {
                     JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
@@ -485,7 +483,8 @@ public class Form_Account extends javax.swing.JPanel {
 
     private void bt_reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_reloadActionPerformed
         // TODO add your handling code here:
-        loadAccounts(); // Load dữ liệu khi khởi động
+        reLoadText();
+        loadAccounts();
         loadRolesToComboBox();
         loadTeachersToComboBox();
     }//GEN-LAST:event_bt_reloadActionPerformed
@@ -500,17 +499,17 @@ public class Form_Account extends javax.swing.JPanel {
         // Lấy dữ liệu từ bảng
         int id = Integer.parseInt(table1.getValueAt(selectedRow, 0).toString());
         String email = table1.getValueAt(selectedRow, 1).toString();
-        String password = table1.getValueAt(selectedRow, 2).toString();
-        int roleId = Integer.parseInt(table1.getValueAt(selectedRow, 3).toString());
-        int teacherId = Integer.parseInt(table1.getValueAt(selectedRow, 4).toString());
+//        String password = table1.getValueAt(selectedRow, 2).toString();
+        String roleName = table1.getValueAt(selectedRow, 3).toString();
+//        String teacherName = table1.getValueAt(selectedRow, 4).toString();
 
         // Hiển thị dữ liệu lên các ô nhập
         tx_email.setText(email);
-        tx_password.setText(password);
+//        tx_password.setText(password);
 
         // Chọn giá trị trong combobox
-        ServiceOPP.selectComboBoxItem(cb_role, roleId);
-        ServiceOPP.selectComboBoxItem(cb_teacher, teacherId);
+        ServiceOPP.selectComboBoxItemByNanme(cb_role, roleName);
+//        ServiceOPP.selectComboBoxItemByNanme(cb_teacher, teacherName);
     }//GEN-LAST:event_table1MouseClicked
 
 

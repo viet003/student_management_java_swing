@@ -1,36 +1,25 @@
 package model;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-import java.util.Date;
 import java.io.Serializable;
+import java.util.Date;
 
-/**
- *
- * @author vieta
- */
 public class Student implements Serializable {
 
-    private int id;
-    private String msv;
+    private String msv;  // Mã sinh viên là khóa chính
     private String studentName;
     private String phone;
     private String email;
     private String address;
     private Date dob;
     private String gender;
-    private String img;
     private String status;
-    private int class_id;
 
-    // Constructor, Getters and Setters
+    // Constructor không tham số
     public Student() {
     }
 
-    public Student(int id, String msv, String studentName, String phone, String email, String address, Date dob, String gender, String img, String status, int class_id) {
-        this.id = id;
+    // Constructor đầy đủ tham số
+    public Student(String msv, String studentName, String phone, String email, String address, Date dob, String gender, String status) {
         this.msv = msv;
         this.studentName = studentName;
         this.phone = phone;
@@ -38,20 +27,10 @@ public class Student implements Serializable {
         this.address = address;
         this.dob = dob;
         this.gender = gender;
-        this.img = img;
         this.status = status;
-        this.class_id = class_id;
-    }
-    // Getters and setters...
-
-    public int getId() {
-        return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    // Getters và Setters
     public String getMsv() {
         return msv;
     }
@@ -92,8 +71,8 @@ public class Student implements Serializable {
         this.address = address;
     }
 
-    public java.sql.Date getDob() {
-        return (java.sql.Date) dob;
+    public Date getDob() {
+        return dob;
     }
 
     public void setDob(Date dob) {
@@ -108,14 +87,6 @@ public class Student implements Serializable {
         this.gender = gender;
     }
 
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -123,13 +94,4 @@ public class Student implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public int getClassId() {
-        return class_id;
-    }
-
-    public void setClassId(int class_id) {
-        this.class_id = class_id;
-    }
-    
 }

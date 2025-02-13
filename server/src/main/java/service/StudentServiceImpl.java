@@ -1,6 +1,5 @@
 package service;
 
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
@@ -20,20 +19,18 @@ public class StudentServiceImpl extends UnicastRemoteObject implements StudentSe
     }
 
     @Override
-    public void addStudent(Student student) throws RemoteException {
-        String sql = "INSERT INTO tbl_student (msv, student_name, phone, email, address, dob, gender, img, status, class_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public boolean addStudent(Student student) throws RemoteException {
+        String sql = "INSERT INTO tbl_student (msv, student_name, phone, email, address, dob, gender, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, student.getMsv());
             stmt.setString(2, student.getStudentName());
             stmt.setString(3, student.getPhone());
             stmt.setString(4, student.getEmail());
             stmt.setString(5, student.getAddress());
-            stmt.setDate(6, student.getDob());
+            stmt.setDate(6, new java.sql.Date(student.getDob().getTime()));
             stmt.setString(7, student.getGender());
-            stmt.setString(8, student.getImg());
-            stmt.setString(9, student.getStatus());
-            stmt.setInt(10, student.getClassId());
-            stmt.executeUpdate();
+            stmt.setString(8, student.getStatus());
+            return stmt.executeUpdate() > 0; // Trả về true nếu có ít nhất một bản ghi được thêm
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RemoteException("Error adding student", e);
@@ -46,7 +43,16 @@ public class StudentServiceImpl extends UnicastRemoteObject implements StudentSe
         String sql = "SELECT * FROM tbl_student";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                students.add(new Student(rs.getInt("id"), rs.getString("msv"), rs.getString("student_name"), rs.getString("phone"), rs.getString("email"), rs.getString("address"), rs.getDate("dob"), rs.getString("gender"), rs.getString("img"), rs.getString("status"), rs.getInt("class_id")));
+                students.add(new Student(
+                        rs.getString("msv"),
+                        rs.getString("student_name"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getString("address"),
+                        rs.getDate("dob"),
+                        rs.getString("gender"),
+                        rs.getString("status")
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,11 +62,11 @@ public class StudentServiceImpl extends UnicastRemoteObject implements StudentSe
     }
 
     @Override
-    public void deleteStudent(int id) throws RemoteException {
-        String sql = "DELETE FROM tbl_student WHERE id = ?";
+    public boolean deleteStudent(String msv) throws RemoteException {
+        String sql = "DELETE FROM tbl_student WHERE msv = ?";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+            stmt.setString(1, msv);
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RemoteException("Error deleting student", e);
@@ -68,21 +74,18 @@ public class StudentServiceImpl extends UnicastRemoteObject implements StudentSe
     }
 
     @Override
-    public void updateStudent(Student student) throws RemoteException {
-        String sql = "UPDATE tbl_student SET msv = ?, student_name = ?, phone = ?, email = ?, address = ?, dob = ?, gender = ?, img = ?, status = ?, class_id = ? WHERE id = ?";
+    public boolean updateStudent(Student student) throws RemoteException {
+        String sql = "UPDATE tbl_student SET student_name = ?, phone = ?, email = ?, address = ?, dob = ?, gender = ?, status = ? WHERE msv = ?";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, student.getMsv());
-            stmt.setString(2, student.getStudentName());
-            stmt.setString(3, student.getPhone());
-            stmt.setString(4, student.getEmail());
-            stmt.setString(5, student.getAddress());
-            stmt.setDate(6, student.getDob());
-            stmt.setString(7, student.getGender());
-            stmt.setString(8, student.getImg());
-            stmt.setString(9, student.getStatus());
-            stmt.setInt(10, student.getClassId());
-            stmt.setInt(11, student.getId());
-            stmt.executeUpdate();
+            stmt.setString(1, student.getStudentName());
+            stmt.setString(2, student.getPhone());
+            stmt.setString(3, student.getEmail());
+            stmt.setString(4, student.getAddress());
+            stmt.setDate(5, new java.sql.Date(student.getDob().getTime()));
+            stmt.setString(6, student.getGender());
+            stmt.setString(7, student.getStatus());
+            stmt.setString(8, student.getMsv());
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RemoteException("Error updating student", e);

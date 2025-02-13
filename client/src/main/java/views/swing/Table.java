@@ -39,9 +39,15 @@ public class Table extends JTable {
                     }
                     return com;
                 } else {
-                    StatusType type = (StatusType) o;
-                    CellStatus cell = new CellStatus(type);
-                    return cell;
+                    Component com = super.getTableCellRendererComponent(jtable, o, selected, bln1, i, i1);
+                    com.setBackground(Color.WHITE);
+                    setBorder(noFocusBorder);
+                    if (selected) {
+                        com.setForeground(new Color(15, 89, 140));
+                    } else {
+                        com.setForeground(new Color(102, 102, 102));
+                    }
+                    return com;
                 }
             }
         });

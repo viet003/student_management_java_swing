@@ -2,6 +2,7 @@ D:\udpt\client\src\main\java\main\MainClient.java
 D:\udpt\client\src\main\java\model\Account.java
 D:\udpt\client\src\main\java\model\Class.java
 D:\udpt\client\src\main\java\model\Course.java
+D:\udpt\client\src\main\java\model\Enroll.java
 D:\udpt\client\src\main\java\model\Mark.java
 D:\udpt\client\src\main\java\model\Role.java
 D:\udpt\client\src\main\java\model\Student.java
@@ -10,6 +11,7 @@ D:\udpt\client\src\main\java\model\Teacher.java
 D:\udpt\client\src\main\java\remote\AccountService.java
 D:\udpt\client\src\main\java\remote\ClassService.java
 D:\udpt\client\src\main\java\remote\CourseService.java
+D:\udpt\client\src\main\java\remote\EnrollService.java
 D:\udpt\client\src\main\java\remote\MarkService.java
 D:\udpt\client\src\main\java\remote\RoleService.java
 D:\udpt\client\src\main\java\remote\StudentService.java
@@ -23,6 +25,7 @@ D:\udpt\client\src\main\java\views\event\EventMenuSelected.java
 D:\udpt\client\src\main\java\views\form\Form_Account.java
 D:\udpt\client\src\main\java\views\form\Form_Class.java
 D:\udpt\client\src\main\java\views\form\Form_Course.java
+D:\udpt\client\src\main\java\views\form\Form_Enroll.java
 D:\udpt\client\src\main\java\views\form\Form_Home.java
 D:\udpt\client\src\main\java\views\form\Form_Mark.java
 D:\udpt\client\src\main\java\views\form\Form_Role.java

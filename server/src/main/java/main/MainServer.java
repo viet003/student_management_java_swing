@@ -4,22 +4,8 @@ package main;
  */
 
 
-import remote.RoleService;
-import remote.TeacherService;
-import remote.ClassService;
-import remote.SubjectService;
-import remote.StudentService;
-import remote.CourseService;
-import remote.MarkService;
-import remote.AccountService;
-import service.MarkServiceImpl;
-import service.CourseServiceImpl;
-import service.AccountServiceImpl;
-import service.ClassServiceImpl;
-import service.StudentServiceImpl;
-import service.SubjectServiceImpl;
-import service.RoleServiceImpl;
-import service.TeacherServiceImpl;
+import remote.*;
+import service.*;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -44,6 +30,7 @@ public class MainServer {
             StudentService studentService = new StudentServiceImpl();
             MarkService markService = new MarkServiceImpl();
             AccountService accountService = new AccountServiceImpl();
+            EnrollService enrollService = new EnrollServiceImpl();
 
             // Đăng ký các dịch vụ vào RMI Registry
             registry.rebind("AccountService", accountService);
@@ -54,6 +41,7 @@ public class MainServer {
             registry.rebind("ClassService", classService);
             registry.rebind("StudentService", studentService);
             registry.rebind("MarkService", markService);
+            registry.rebind("EnrollService", enrollService);
 
             System.out.println("Server is running at port " + port + "...");
         } catch (Exception e) {

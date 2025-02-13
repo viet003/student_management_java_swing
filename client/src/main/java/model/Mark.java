@@ -1,46 +1,52 @@
 package model;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 
 import java.util.Date;
 import java.io.Serializable;
 
 /**
- *
  * @author vieta
  */
 public class Mark implements Serializable {
 
     private int student_id;
+    private String studentName; // Thêm thuộc tính studentName
     private int subject_id;
     private double mark;
     private String status;
     private String note;
     private Date examDate;
 
-    // Constructor, Getters and Setters
+    // Constructor mặc định
     public Mark() {
     }
 
-    public Mark(int student_id, int subject_id, double mark, String status, String note, Date examDate) {
+    // Constructor với các tham số
+    public Mark(int student_id, String studentName, int subject_id, double mark, String status, String note, Date examDate) {
         this.student_id = student_id;
+        this.studentName = studentName; // Khởi tạo studentName
         this.subject_id = subject_id;
         this.mark = mark;
         this.status = status;
         this.note = note;
         this.examDate = examDate;
     }
+
     // Getters and setters...
 
     public int getStudentId() {
         return student_id;
     }
 
-    public void setStudent(int student_id) {
+    public void setStudentId(int student_id) {
         this.student_id = student_id;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     public int getSubjectId() {
@@ -75,12 +81,11 @@ public class Mark implements Serializable {
         this.note = note;
     }
 
-    public java.sql.Date getExamDate() {
-        return (java.sql.Date) examDate;
+    public Date getExamDate() {
+        return (Date) examDate;
     }
 
     public void setExamDate(Date examDate) {
         this.examDate = examDate;
     }
-    
 }

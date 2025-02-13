@@ -10,13 +10,13 @@ import views.event.EventMenuSelected;
 import views.form.Form_Account;
 import views.form.Form_Class;
 import views.form.Form_Course;
+import views.form.Form_Enroll;
 import views.form.Form_Home;
 import views.form.Form_Mark;
 import views.form.Form_Role;
 import views.form.Form_Student;
 import views.form.Form_Subject;
 import views.form.Form_Teacher;
-import views.swing.ScrollBar;
 
 /**
  *
@@ -33,6 +33,7 @@ public class Main extends javax.swing.JFrame {
     private Form_Student form_student;
     private Form_Teacher form_teacher;
     private Form_Subject form_subject;
+    private Form_Enroll form_enroll;
 
     public Main() {
         initComponents();
@@ -45,7 +46,8 @@ public class Main extends javax.swing.JFrame {
         form_student = new Form_Student();
         form_teacher = new Form_Teacher();
         form_subject = new Form_Subject();
-
+        form_enroll = new Form_Enroll();
+        
         menu2.addEventMenuSelected(new EventMenuSelected() {
             @Override
             public void selected(int index) {
@@ -70,13 +72,16 @@ public class Main extends javax.swing.JFrame {
                         setForm(form_mark);
                         break;
                     case 7:
-                        setForm(form_class);
-                        break;
-                    case 8:
                         setForm(form_course);
                         break;
-                    case 9:
+                    case 8:
                         setForm(form_subject);
+                        break;
+                    case 9:
+                        setForm(form_class);
+                        break;
+                    case 10:
+                        setForm(form_enroll);
                         break;
                     default:
 
@@ -109,7 +114,8 @@ public class Main extends javax.swing.JFrame {
         menu2 = new views.component.Menu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Trang chủ");
+        setTitle("Quản lý sinh viên");
+        setFocusCycleRoot(false);
 
         panelBorder1.setAlignmentX(0.0F);
         panelBorder1.setAlignmentY(0.0F);
