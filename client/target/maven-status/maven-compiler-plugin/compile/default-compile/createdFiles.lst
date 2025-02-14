@@ -27,6 +27,7 @@ views\form\Form_Subject$1.class
 views\swing\Table$2.class
 views\model\Model_Menu.class
 views\component\Card.class
+views\page\Login$2.class
 remote\SubjectService.class
 views\form\Form_Enroll$6.class
 views\page\Main.class

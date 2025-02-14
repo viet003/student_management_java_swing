@@ -39,7 +39,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="header2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="18" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="jPanel1" min="-2" pref="178" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="panelBorder1" min="-2" pref="321" max="-2" attributes="0"/>
@@ -99,15 +99,15 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" pref="170" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-              </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="spTable" max="32767" attributes="0"/>
+                  <Component id="spTable" pref="963" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                  <Component id="jLabel1" min="-2" pref="220" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -132,7 +132,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="6c" green="6c" red="72" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch l&#x1edb;p h&#x1ecd;c"/>
+            <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch t&#xe0;i kho&#x1ea3;n"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="spTable">

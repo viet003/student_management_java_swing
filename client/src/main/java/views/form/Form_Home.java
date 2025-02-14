@@ -24,9 +24,9 @@ public class Form_Home extends javax.swing.JPanel {
      */
     public Form_Home() {
         initComponents();
-        card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/stock.png")), "Stock Total", "$200000", "Increased by 60%"));
-        card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/profit.png")), "Total Profit", "$15000", "Increased by 25%"));
-        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/flag.png")), "Unique Visitors", "$300000", "Increased by 70%"));
+        card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/stock.png")), "Số lượng lớp học", "10", "Thông số được ước tính đến nay"));
+        card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/profit.png")), "Số lượng sinh viên", "100", "Thông số được ước tính đến nay"));
+        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/flag.png")), "Số lượng giảng viên", "20", "Thông số được ước tính đến nay"));
          //add row table
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
@@ -89,7 +89,7 @@ public class Form_Home extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(114, 108, 108));
-        jLabel1.setText("Danh sách lớp học");
+        jLabel1.setText("Danh sách tài khoản");
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -106,13 +106,13 @@ public class Form_Home extends javax.swing.JPanel {
         panelBorder1Layout.setHorizontalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(panelBorder1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(spTable)
+                .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 963, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(panelBorder1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,7 +142,7 @@ public class Form_Home extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(header2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)

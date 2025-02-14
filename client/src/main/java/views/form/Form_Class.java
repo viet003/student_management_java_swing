@@ -44,6 +44,7 @@ public class Form_Class extends javax.swing.JPanel {
     public Form_Class() {
         initComponents();
         init();
+        loadClasses();
         loadCourseToComboBox();
         loadTeachersToComboBox();
         loadSubjectsToComboBox();
@@ -116,7 +117,7 @@ public class Form_Class extends javax.swing.JPanel {
 
     private void loadTeachersToComboBox() {
         try {
-            List<Teacher> teachers = teacherService.getTeachersWithoutAccount(); // Lấy danh sách roles từ server
+            List<Teacher> teachers = teacherService.getAllTeachers(); // Lấy danh sách roles từ server
             cb_teacher.removeAllItems(); // Xóa các mục cũ trước khi thêm mới
 
             for (Teacher teacher : teachers) {

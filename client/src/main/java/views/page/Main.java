@@ -47,7 +47,7 @@ public class Main extends javax.swing.JFrame {
         form_teacher = new Form_Teacher();
         form_subject = new Form_Subject();
         form_enroll = new Form_Enroll();
-        
+
         menu2.addEventMenuSelected(new EventMenuSelected() {
             @Override
             public void selected(int index) {
@@ -63,7 +63,6 @@ public class Main extends javax.swing.JFrame {
                         break;
                     case 4:
                         setForm(form_student);
-
                         break;
                     case 5:
                         setForm(form_teacher);
@@ -82,6 +81,11 @@ public class Main extends javax.swing.JFrame {
                         break;
                     case 10:
                         setForm(form_enroll);
+                        break;
+                    case 11:
+                        // Xử lý đăng xuất
+                        dispose(); // Đóng form hiện tại
+                        new Login().setVisible(true); // Mở form đăng nhập
                         break;
                     default:
 

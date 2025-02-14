@@ -1,7 +1,10 @@
 package service;
 
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,14 +22,38 @@ public class AccountServiceImpl extends UnicastRemoteObject implements AccountSe
         super();
     }
 
+    // Phương thức mã hóa mật khẩu sử dụng SHA-256
+    private String hashPassword(String password) {
+        try {
+            // Tạo đối tượng MessageDigest với thuật toán SHA-256
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // Mã hóa mật khẩu thành mảng byte
+            byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            // Chuyển đổi mảng byte thành chuỗi hex
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error hashing password", e);
+        }
+    }
+
     @Override
     public boolean addAccount(Account account) throws RemoteException {
         String sql = "INSERT INTO tbl_account (email, password, role_id, teacher_id) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // Mã hóa mật khẩu trước khi lưu
+            String hashedPassword = hashPassword(account.getPassword());
+
             stmt.setString(1, account.getEmail());
-            stmt.setString(2, account.getPassword());
+            stmt.setString(2, hashedPassword); // Lưu mật khẩu đã mã hóa
             stmt.setInt(3, account.getRoleId());
             stmt.setInt(4, account.getTeacherId());
             int rowsAffected = stmt.executeUpdate();
@@ -58,8 +85,11 @@ public class AccountServiceImpl extends UnicastRemoteObject implements AccountSe
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // Mã hóa mật khẩu trước khi cập nhật
+            String hashedPassword = hashPassword(account.getPassword());
+
             stmt.setString(1, account.getEmail());
-            stmt.setString(2, account.getPassword());
+            stmt.setString(2, hashedPassword); // Cập nhật mật khẩu đã mã hóa
             stmt.setInt(3, account.getRoleId());
             stmt.setInt(4, account.getId());
             int rowsAffected = stmt.executeUpdate();
@@ -104,27 +134,30 @@ public class AccountServiceImpl extends UnicastRemoteObject implements AccountSe
     }
 
     @Override
-    public Account getAccountByEmail(String email) throws RemoteException {
-        String sql = "SELECT * FROM tbl_account WHERE email = ?";
+    public boolean login(String email, String password) throws RemoteException {
+        String sql = "SELECT password FROM tbl_account WHERE email = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Account(
-                            rs.getInt("id"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getInt("role_id"),
-                            rs.getInt("teacher_id") // Lấy teacher_id từ DB
-                    );
+                    // Lấy mật khẩu đã mã hóa từ cơ sở dữ liệu
+                    String hashedPasswordFromDB = rs.getString("password");
+
+                    // Mã hóa mật khẩu nhập vào
+                    String hashedInputPassword = hashPassword(password);
+
+                    // So sánh mật khẩu đã mã hóa
+                    if (hashedInputPassword.equals(hashedPasswordFromDB)) {
+                        return true; // Đăng nhập thành công
+                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RemoteException("Error retrieving account by email", e);
+            throw new RemoteException("Error during login", e);
         }
-        return null;
+        return false; // Đăng nhập thất bại
     }
 }

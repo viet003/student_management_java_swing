@@ -7,6 +7,7 @@ package views.page;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import javax.swing.JOptionPane;
 import remote.AccountService;
 
 /**
@@ -17,6 +18,7 @@ public class Login extends javax.swing.JFrame {
 
     private Registry registry;
     private AccountService accountService;
+    private Main main;
 
     /**
      * Creates new form Login
@@ -29,7 +31,7 @@ public class Login extends javax.swing.JFrame {
     public void init() {
         try {
             registry = LocateRegistry.getRegistry("localhost", 2025);
-            AccountService accountService = (AccountService) registry.lookup("AccountService");
+            accountService = (AccountService) registry.lookup("AccountService"); // Gán giá trị cho biến accountService của lớp
             System.out.println("Kết nối RMI thành công!");
         } catch (RemoteException e) {
             System.err.println("Lỗi kết nối RMI: " + e.getMessage());
@@ -110,6 +112,11 @@ public class Login extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(0, 102, 102));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Đăng nhập");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -182,6 +189,45 @@ public class Login extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Kiểm tra nếu accountService chưa được khởi tạo
+        if (accountService == null) {
+            JOptionPane.showMessageDialog(this, "Lỗi: Không thể kết nối đến dịch vụ đăng nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Lấy email và mật khẩu từ các trường nhập liệu
+        String email = jTextField1.getText().trim();
+        String password = new String(jPasswordField1.getPassword()).trim();
+
+        // Kiểm tra nếu email hoặc mật khẩu trống
+        if (email.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ email và mật khẩu!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Gọi phương thức đăng nhập từ AccountService
+            boolean isLoginSuccessful = accountService.login(email, password);
+
+            if (isLoginSuccessful) {
+                // Đăng nhập thành công, chuyển hướng đến trang chính
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                // Ví dụ: Mở trang chính (MainPage)
+                main= new Main();
+                main.setVisible(true);
+                this.dispose(); // Đóng cửa sổ đăng nhập
+            } else {
+                // Đăng nhập thất bại, hiển thị thông báo lỗi
+                JOptionPane.showMessageDialog(this, "Đăng nhập thất bại: Sai email hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (RemoteException e) {
+            // Xử lý lỗi kết nối RMI
+            JOptionPane.showMessageDialog(this, "Lỗi kết nối đến server: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
