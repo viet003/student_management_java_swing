@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import model.Student;
 import controller.DatabaseConnection;
 import remote.StudentService;
@@ -90,5 +91,19 @@ public class StudentServiceImpl extends UnicastRemoteObject implements StudentSe
             e.printStackTrace();
             throw new RemoteException("Error updating student", e);
         }
+    }
+
+    @Override
+    public int getStudentCount() throws RemoteException {
+        String sql = "SELECT COUNT(*) FROM tbl_student";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RemoteException("Error getting student count", e);
+        }
+        return 0; // Trả về 0 nếu có lỗi xảy ra
     }
 }

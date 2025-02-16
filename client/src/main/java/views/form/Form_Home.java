@@ -8,10 +8,22 @@ import views.model.Model_Card;
 import views.model.StatusType;
 import views.swing.ScrollBar;
 import java.awt.Color;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
+import javax.swing.table.DefaultTableModel;
+import model.Account;
+import remote.AccountService;
+import remote.ClassService;
+import remote.EnrollService;
+import remote.StudentService;
+import remote.TeacherService;
 
 /**
  *
@@ -19,35 +31,95 @@ import javax.swing.JScrollPane;
  */
 public class Form_Home extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Form_Home
-     */
+    private Registry registry;
+    private StudentService studentService;
+    private TeacherService teacherService;
+    private ClassService classService;
+    private AccountService accountService;
+
+    private int qtClass = 0;
+    private int qtStudent = 0;
+    private int qtTeacher = 0;
+
     public Form_Home() {
         initComponents();
-        card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/stock.png")), "Số lượng lớp học", "10", "Thông số được ước tính đến nay"));
-        card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/profit.png")), "Số lượng sinh viên", "100", "Thông số được ước tính đến nay"));
-        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/views/icon/flag.png")), "Số lượng giảng viên", "20", "Thông số được ước tính đến nay"));
-         //add row table
+        init();
+        initAtributtes();
+        addItemToCard(qtClass, qtStudent, qtTeacher);
+        setupTable();
+    }
+
+    private void init() {
+        try {
+            registry = LocateRegistry.getRegistry("localhost", 2025);
+            studentService = (StudentService) registry.lookup("StudentService");
+            teacherService = (TeacherService) registry.lookup("TeacherService");
+            classService = (ClassService) registry.lookup("ClassService");
+            accountService = (AccountService) registry.lookup("AccountService");
+            System.out.println("Kết nối RMI thành công!");
+        } catch (RemoteException | java.rmi.NotBoundException e) {
+            System.err.println("Lỗi kết nối RMI: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void initAtributtes() {
+        try {
+            if (classService != null) {
+                qtClass = classService.getClassCount();
+            }
+            if (studentService != null) {
+                qtStudent = studentService.getStudentCount();
+            }
+            if (teacherService != null) {
+                qtTeacher = teacherService.getTeacherCount();
+            }
+        } catch (RemoteException e) {
+            System.err.println("Lỗi khi lấy số lượng: " + e.getMessage());
+        }
+    }
+
+    private void addItemToCard(int qtClass, int qtStudent, int qtTeacher) {
+        card1.setData(new Model_Card(
+                new ImageIcon(getClass().getResource("/views/icon/stock.png")),
+                "Số lượng lớp học", String.valueOf(qtClass), "Thông số được ước tính đến nay"
+        ));
+        card2.setData(new Model_Card(
+                new ImageIcon(getClass().getResource("/views/icon/profit.png")),
+                "Số lượng sinh viên", String.valueOf(qtStudent), "Thông số được ước tính đến nay"
+        ));
+        card3.setData(new Model_Card(
+                new ImageIcon(getClass().getResource("/views/icon/flag.png")),
+                "Số lượng giảng viên", String.valueOf(qtTeacher), "Thông số được ước tính đến nay"
+        ));
+    }
+
+    private void setupTable() {
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
+
         JPanel p = new JPanel();
         p.setBackground(Color.WHITE);
-//        table.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        table.addRow(new Object[]{"Mike Bhand", "mikebhand@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
-        table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.REJECT});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
-        table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.REJECT});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
-        table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.REJECT});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
+
+        try {
+            List<Account> accounts = accountService.getAllAccounts(); // Lấy danh sách tài khoản từ server
+            List<StatusType> statuses = Arrays.asList(StatusType.ACTIVE);
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0); // Xóa dữ liệu cũ trước khi nạp mới
+
+            for (Account account : accounts) {
+                model.addRow(new Object[]{
+                    account.getTeacherName(),
+                    account.getEmail(),
+                    account.getRoleName(), // Hiển thị tên vai trò thay vì ID
+                    "25 Apr,2018",
+                    statuses.get(new Random().nextInt(statuses.size()))
+                });
+            }
+        } catch (RemoteException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi tải danh sách tài khoản: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -96,7 +168,7 @@ public class Form_Home extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Name", "Email", "User type", "Joined", "Status"
+                "Họ và tên", "Email", "Loại tài khoản", "Ngày tham gia", "Status"
             }
         ));
         spTable.setViewportView(table);

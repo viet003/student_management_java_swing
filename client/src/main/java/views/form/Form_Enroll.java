@@ -41,7 +41,7 @@ public class Form_Enroll extends javax.swing.JPanel {
      */
     public Form_Enroll() {
         initComponents();
-        init();
+        init(); 
         loadEnrolls(0);
         loadClassToComboBox();    // Tải danh sách lớp học
         loadStudentToComboBox(0);   // Tải danh sách sinh viên
@@ -127,7 +127,7 @@ public class Form_Enroll extends javax.swing.JPanel {
         if (keyword.isEmpty()) {
             sorter.setRowFilter(null); // Hiển thị toàn bộ dữ liệu nếu ô tìm kiếm rỗng
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 1)); // Lọc theo cột thứ 2 (cột tên giảng viên)
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 0)); // Lọc theo cột thứ 2 (cột tên giảng viên)
         }
     }
 
@@ -327,7 +327,7 @@ public class Form_Enroll extends javax.swing.JPanel {
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -416,16 +416,16 @@ public class Form_Enroll extends javax.swing.JPanel {
             // Gửi yêu cầu thêm dữ liệu vào bảng tbl_Enroll
             boolean success = enrollService.addEnroll(newEnroll);
             if (success) {
-                JOptionPane.showMessageDialog(this, "Thêm dữ liệu vào bảng Enroll thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Thêm dữ liệu vào lớp học thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 reLoadText(); // Xóa nội dung nhập (nếu có)
                 loadEnrolls(classId); // Cập nhật danh sách Enroll (nếu cần)
                 loadStudentToComboBox(classId); // Cập nhật danh sách sinh viên trong ComboBox
                 loadClassToComboBox(); // Cập nhật danh sách lớp học trong ComboBox
             } else {
-                JOptionPane.showMessageDialog(this, "Thêm dữ liệu vào bảng Enroll thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Thêm dữ liệu vào lớp học thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (RemoteException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi thêm dữ liệu vào bảng Enroll: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm dữ liệu vào lớp học(Enroll): " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_bt_themActionPerformed
 

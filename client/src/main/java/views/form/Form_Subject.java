@@ -309,7 +309,7 @@ public class Form_Subject extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -328,7 +328,7 @@ public class Form_Subject extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 595, Short.MAX_VALUE)
+            .addGap(0, 596, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -381,8 +381,8 @@ public class Form_Subject extends javax.swing.JPanel {
         try {
             String name = tx_subjectName.getText();
             String priceStr = tx_price.getText();
-            String accredit = cb_accredit.getSelectedItem().toString(); // Lấy accredit từ ComboBox
-            String status = cb_status.getSelectedItem().toString(); // Lấy trạng thái từ ComboBox
+            String accredit = cb_accredit.getSelectedItem().toString();
+            String status = cb_status.getSelectedItem().toString();
 
             // Kiểm tra dữ liệu nhập vào
             if (name.isEmpty() || priceStr.isEmpty()) {
@@ -393,17 +393,25 @@ public class Form_Subject extends javax.swing.JPanel {
             double price;
             try {
                 price = Double.parseDouble(priceStr);
+                if (price <= 0) {
+                    JOptionPane.showMessageDialog(this, "Giá phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (price > 1000000000) { // Hạn mức tối đa (tùy chỉnh theo yêu cầu)
+                    JOptionPane.showMessageDialog(this, "Giá quá lớn! Vui lòng nhập giá hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Giá phải là một số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             Subject newSubject = new Subject(0, name, accredit, price, status);
-            boolean isAdded = subjectService.addSubject(newSubject); // Kiểm tra kết quả
+            boolean isAdded = subjectService.addSubject(newSubject);
 
             if (isAdded) {
                 JOptionPane.showMessageDialog(this, "Thêm môn học thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                loadSubjects(); // Cập nhật lại danh sách
+                loadSubjects();
                 reLoadText();
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm môn học thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -435,13 +443,21 @@ public class Form_Subject extends javax.swing.JPanel {
             double price;
             try {
                 price = Double.parseDouble(priceStr);
+                if (price <= 0) {
+                    JOptionPane.showMessageDialog(this, "Giá phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (price > 1000000000) { // Giới hạn tối đa (có thể điều chỉnh)
+                    JOptionPane.showMessageDialog(this, "Giá quá lớn! Vui lòng nhập giá hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Giá phải là một số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             Subject updatedSubject = new Subject(id, name, accredit, price, status);
-            boolean isUpdated = subjectService.updateSubject(updatedSubject); // Kiểm tra kết quả
+            boolean isUpdated = subjectService.updateSubject(updatedSubject);
 
             if (isUpdated) {
                 JOptionPane.showMessageDialog(this, "Cập nhật môn học thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);

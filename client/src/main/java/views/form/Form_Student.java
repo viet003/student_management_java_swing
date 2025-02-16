@@ -89,7 +89,7 @@ public class Form_Student extends javax.swing.JPanel {
         if (keyword.isEmpty()) {
             sorter.setRowFilter(null); // Hiển thị toàn bộ dữ liệu nếu ô tìm kiếm rỗng
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 1)); // Lọc theo cột thứ 2 (cột tên giảng viên)
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 0)); // Lọc theo cột thứ 2 (cột tên giảng viên)
         }
     }
 
@@ -167,7 +167,7 @@ public class Form_Student extends javax.swing.JPanel {
                 .addComponent(txt_search, javax.swing.GroupLayout.PREFERRED_SIZE, 871, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +203,7 @@ public class Form_Student extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addGap(5, 5, 5))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +325,7 @@ public class Form_Student extends javax.swing.JPanel {
                 .addComponent(tx_studentName, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(tx_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
@@ -365,14 +365,14 @@ public class Form_Student extends javax.swing.JPanel {
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(5, 5, 5)
+                .addGap(6, 6, 6)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -382,21 +382,15 @@ public class Form_Student extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1000, Short.MAX_VALUE)
+            .addGap(0, 1012, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 596, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -458,18 +452,30 @@ public class Form_Student extends javax.swing.JPanel {
     private void bt_themActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_themActionPerformed
         // TODO add your handling code here:
         try {
-            String msv = tx_msv.getText();
-            String name = tx_studentName.getText();
-            String phone = tx_phone.getText();
-            String email = tx_email.getText();
-            String address = tx_address.getText();
+            String msv = tx_msv.getText().trim();
+            String name = tx_studentName.getText().trim();
+            String phone = tx_phone.getText().trim();
+            String email = tx_email.getText().trim();
+            String address = tx_address.getText().trim();
             Date dob = cld_dob.getDate(); // Lấy ngày sinh từ JDateChooser
             String gender = cb_gender.getSelectedItem().toString(); // Lấy giới tính từ ComboBox
             String status = cb_status.getSelectedItem().toString(); // Lấy trạng thái từ ComboBox
 
-            // Kiểm tra dữ liệu đầu vào
+            // Kiểm tra dữ liệu đầu vào không được để trống
             if (msv.isEmpty() || name.isEmpty() || phone.isEmpty() || email.isEmpty() || address.isEmpty() || dob == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra mã sinh viên phải có đúng 8 chữ số
+            if (!msv.matches("\\d{8}")) {
+                JOptionPane.showMessageDialog(this, "Mã sinh viên phải có đúng 8 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra số điện thoại phải có đúng 10 chữ số
+            if (!phone.matches("\\d{10}")) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại phải có đúng 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -497,24 +503,30 @@ public class Form_Student extends javax.swing.JPanel {
                 return;
             }
 
-            String msv = tx_msv.getText();
-            String name = tx_studentName.getText();
-            String phone = tx_phone.getText();
-            String email = tx_email.getText();
-            String address = tx_address.getText();
+            String msv = tx_msv.getText().trim();
+            String name = tx_studentName.getText().trim();
+            String phone = tx_phone.getText().trim();
+            String email = tx_email.getText().trim();
+            String address = tx_address.getText().trim();
             Date dob = cld_dob.getDate();
             String gender = cb_gender.getSelectedItem().toString();
             String status = cb_status.getSelectedItem().toString();
 
-            // Kiểm tra dữ liệu đầu vào
+            // Kiểm tra dữ liệu đầu vào không được để trống
             if (msv.isEmpty() || name.isEmpty() || phone.isEmpty() || email.isEmpty() || address.isEmpty() || dob == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // Kiểm tra số điện thoại hợp lệ (chỉ chứa số và có đúng 10 ký tự)
+            // Kiểm tra mã sinh viên phải có đúng 8 chữ số
+            if (!msv.matches("\\d{8}")) {
+                JOptionPane.showMessageDialog(this, "Mã sinh viên phải có đúng 8 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra số điện thoại phải có đúng 10 chữ số
             if (!phone.matches("\\d{10}")) {
-                JOptionPane.showMessageDialog(this, "Số điện thoại phải có đúng 10 chữ số!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Số điện thoại phải có đúng 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

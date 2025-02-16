@@ -106,6 +106,7 @@ public class Form_Account extends javax.swing.JPanel {
         }
     }
 
+    // hàm tìm kiếm tài khoản
     private void filterTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) table1.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
@@ -334,14 +335,14 @@ public class Form_Account extends javax.swing.JPanel {
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -366,6 +367,19 @@ public class Form_Account extends javax.swing.JPanel {
                 return;
             }
 
+            // Kiểm tra định dạng email hợp lệ
+            String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+            if (!email.matches(emailRegex)) {
+                JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra mật khẩu có ít nhất 8 ký tự
+            if (password.length() < 8) {
+                JOptionPane.showMessageDialog(this, "Mật khẩu phải có ít nhất 8 ký tự!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             // Kiểm tra nếu vai trò chưa được chọn
             if (cb_role.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn vai trò!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
@@ -383,14 +397,14 @@ public class Form_Account extends javax.swing.JPanel {
             int teacherId = selectedTeacher.getId();
 
             // Tạo tài khoản mới
-            Account newAccount = new Account(0, email, password, roleId, teacherId); // ID = 0 vì sẽ tự tăng trong DB
+            Account newAccount = new Account(0, email, password, roleId, teacherId);
 
             // Gửi yêu cầu thêm tài khoản
             boolean success = accountService.addAccount(newAccount);
             if (success) {
                 JOptionPane.showMessageDialog(this, "Thêm tài khoản thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                reLoadText(); // Xóa nội dung nhập
-                loadAccounts(); // Cập nhật danh sách tài khoản
+                reLoadText();
+                loadAccounts();
                 loadRolesToComboBox();
                 loadTeachersToComboBox();
             } else {
@@ -401,7 +415,6 @@ public class Form_Account extends javax.swing.JPanel {
         } catch (RemoteException e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi thêm tài khoản: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_bt_themActionPerformed
 
     private void bt_suaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_suaActionPerformed
@@ -417,6 +430,25 @@ public class Form_Account extends javax.swing.JPanel {
             String email = tx_email.getText().trim();
             String password = tx_password.getText().trim();
 
+            // Kiểm tra email và mật khẩu không được rỗng
+            if (email.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Email và mật khẩu không được để trống!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra định dạng email hợp lệ
+            String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+            if (!email.matches(emailRegex)) {
+                JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra mật khẩu có ít nhất 8 ký tự
+            if (password.length() < 8) {
+                JOptionPane.showMessageDialog(this, "Mật khẩu phải có ít nhất 8 ký tự!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             // Kiểm tra xem đã chọn Role hay chưa
             if (cb_role.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn vai trò!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
@@ -425,15 +457,9 @@ public class Form_Account extends javax.swing.JPanel {
             ComboItem selectedRole = (ComboItem) cb_role.getSelectedItem();
             int roleId = selectedRole.getId();
 
-            // Kiểm tra email và mật khẩu không được rỗng
-            if (email.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Email và mật khẩu không được để trống!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
             // Tạo đối tượng Account để cập nhật
             Account updatedAccount = new Account(id, email, password, roleId, 1);
-            
+
             // Gửi yêu cầu cập nhật
             boolean success = accountService.updateAccount(updatedAccount);
             if (success) {
@@ -499,13 +525,10 @@ public class Form_Account extends javax.swing.JPanel {
         // Lấy dữ liệu từ bảng
         int id = Integer.parseInt(table1.getValueAt(selectedRow, 0).toString());
         String email = table1.getValueAt(selectedRow, 1).toString();
-//        String password = table1.getValueAt(selectedRow, 2).toString();
         String roleName = table1.getValueAt(selectedRow, 3).toString();
-//        String teacherName = table1.getValueAt(selectedRow, 4).toString();
 
         // Hiển thị dữ liệu lên các ô nhập
         tx_email.setText(email);
-//        tx_password.setText(password);
 
         // Chọn giá trị trong combobox
         ServiceOPP.selectComboBoxItemByNanme(cb_role, roleName);

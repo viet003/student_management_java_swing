@@ -80,12 +80,14 @@ public class Main extends javax.swing.JFrame {
                         setForm(form_class);
                         break;
                     case 10:
+                        System.out.println("selected");
                         setForm(form_enroll);
                         break;
-                    case 11:
-                        // Xử lý đăng xuất
-                        dispose(); // Đóng form hiện tại
-                        new Login().setVisible(true); // Mở form đăng nhập
+                    case 13:
+                        System.out.println("Logout selected");
+                        setVisible(false); // Ẩn cửa sổ hiện tại
+                        new Login().setVisible(true); // Hiển thị cửa sổ đăng nhập
+                        dispose(); // Kết thúc ứng dụng
                         break;
                     default:
 

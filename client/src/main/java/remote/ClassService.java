@@ -1,6 +1,5 @@
 package remote;
 
-
 import model.Class;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -11,5 +10,5 @@ public interface ClassService extends Remote {
     List<Class> getAllClasses() throws RemoteException;
     boolean deleteClass(int id) throws RemoteException;
     boolean updateClass(Class studentClass) throws RemoteException;
-//    Class getClassById(int id) throws RemoteException;
+    int getClassCount() throws RemoteException; 
 }

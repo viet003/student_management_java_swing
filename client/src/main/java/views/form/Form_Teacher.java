@@ -351,8 +351,15 @@ public class Form_Teacher extends javax.swing.JPanel {
             Date dob = cld_dob.getDate(); // Lấy ngày sinh từ JDateChooser
             String status = cb_status.getSelectedItem().toString(); // Lấy trạng thái từ ComboBox
 
+            // Kiểm tra thông tin bắt buộc
             if (name.isEmpty() || phone.isEmpty() || address.isEmpty() || dob == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Validate số điện thoại: phải là chuỗi số và đúng 10 ký tự số
+            if (!phone.matches("\\d{10}")) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại phải gồm đúng 10 chữ số!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -388,6 +395,12 @@ public class Form_Teacher extends javax.swing.JPanel {
 
             if (name.isEmpty() || phone.isEmpty() || address.isEmpty() || dob == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Validate số điện thoại: phải là chuỗi số và đúng 10 ký tự số
+            if (!phone.matches("\\d{10}")) {
+                JOptionPane.showMessageDialog(this, "Số điện thoại phải gồm đúng 10 chữ số!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 

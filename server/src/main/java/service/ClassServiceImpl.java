@@ -98,4 +98,24 @@ public class ClassServiceImpl extends UnicastRemoteObject implements ClassServic
             throw new RemoteException("Error updating class", e);
         }
     }
+
+    @Override
+    public int getClassCount() throws RemoteException {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM tbl_class";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RemoteException("Lỗi khi lấy số lượng lớp học", e);
+        }
+        return count;
+    }
+
+
 }

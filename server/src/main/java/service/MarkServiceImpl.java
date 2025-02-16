@@ -18,26 +18,46 @@ public class MarkServiceImpl extends UnicastRemoteObject implements MarkService 
 
     @Override
     public boolean addMark(Mark mark) throws RemoteException {
-        String sql = "INSERT INTO tbl_mark (student_msv, sub_id, mark, status, note, ex_date) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, mark.getStudentId());
-            stmt.setInt(2, mark.getSubjectId());
-            stmt.setDouble(3, mark.getMark());
-            stmt.setString(4, mark.getStatus());
-            stmt.setString(5, mark.getNote());
+        String checkSql = "SELECT COUNT(*) FROM tbl_enroll e " +
+                "JOIN tbl_class c ON e.class_id = c.id " +
+                "WHERE e.student_msv = ? AND c.subject_id = ?";
+
+        String insertSql = "INSERT INTO tbl_mark (student_msv, sub_id, mark, status, note, ex_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+             PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+
+            // Kiểm tra xem sinh viên đã đăng ký môn học chưa
+            checkStmt.setInt(1, mark.getStudentId());
+            checkStmt.setInt(2, mark.getSubjectId());
+
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) == 0) {
+                throw new RemoteException("Sinh viên chưa đăng ký môn học này, không thể thêm điểm.");
+            }
+
+            // Nếu sinh viên đã đăng ký môn học, thực hiện thêm điểm
+            insertStmt.setInt(1, mark.getStudentId());
+            insertStmt.setInt(2, mark.getSubjectId());
+            insertStmt.setDouble(3, mark.getMark());
+            insertStmt.setString(4, mark.getStatus());
+            insertStmt.setString(5, mark.getNote());
 
             // Chuyển đổi java.util.Date sang java.sql.Date
             java.util.Date utilDate = mark.getExamDate();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime()); // Chuyển đổi tại đây
-            stmt.setDate(6, sqlDate);
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            insertStmt.setDate(6, sqlDate);
 
-            stmt.executeUpdate();
-            return true; // Trả về true nếu thêm thành công
+            insertStmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RemoteException("Error adding mark", e);
+            throw new RemoteException("Lỗi khi thêm điểm", e);
         }
     }
+
 
     @Override
     public List<Mark> getAllMarks() throws RemoteException {

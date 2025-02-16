@@ -31,19 +31,21 @@ public class ListMenu<E extends Object> extends JList<E> {
             public void mousePressed(MouseEvent me) {
                 if (SwingUtilities.isLeftMouseButton(me)) {
                     int index = locationToIndex(me.getPoint());
-                    Object o = model.getElementAt(index);
-                    if (o instanceof Model_Menu) {
-                        Model_Menu menu = (Model_Menu) o;
-                        if (menu.getType() == Model_Menu.MenuType.MENU) {
-                            selectedIndex = index;
-                            if (event != null) {
-                                event.selected(index);
+                    if (index >= 0 && index < model.size()) { // Đảm bảo index hợp lệ
+                        Object o = model.getElementAt(index);
+                        if (o instanceof Model_Menu) {
+                            Model_Menu menu = (Model_Menu) o;
+                            if (menu.getType() == Model_Menu.MenuType.MENU) {
+                                selectedIndex = index;
+                                if (event != null) {
+                                    event.selected(index); // Gọi sự kiện selected
+                                }
                             }
+                        } else {
+                            selectedIndex = index;
                         }
-                    } else {
-                        selectedIndex = index;
+                        repaint();
                     }
-                    repaint();
                 }
             }
 
@@ -58,15 +60,17 @@ public class ListMenu<E extends Object> extends JList<E> {
             public void mouseMoved(MouseEvent me) {
                 int index = locationToIndex(me.getPoint());
                 if (index != overIndex) {
-                    Object o = model.getElementAt(index);
-                    if (o instanceof Model_Menu) {
-                        Model_Menu menu = (Model_Menu) o;
-                        if (menu.getType() == Model_Menu.MenuType.MENU) {
-                            overIndex = index;
-                        } else {
-                            overIndex = -1;
+                    if (index >= 0 && index < model.size()) { // Đảm bảo index hợp lệ
+                        Object o = model.getElementAt(index);
+                        if (o instanceof Model_Menu) {
+                            Model_Menu menu = (Model_Menu) o;
+                            if (menu.getType() == Model_Menu.MenuType.MENU) {
+                                overIndex = index;
+                            } else {
+                                overIndex = -1;
+                            }
+                            repaint();
                         }
-                        repaint();
                     }
                 }
             }
@@ -86,9 +90,9 @@ public class ListMenu<E extends Object> extends JList<E> {
                 }
                 MenuItem item = new MenuItem(data);
                 item.setSelected(selectedIndex == index);
+                item.setOver(overIndex == index);
                 return item;
             }
-
         };
     }
 

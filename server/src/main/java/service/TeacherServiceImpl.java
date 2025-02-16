@@ -133,5 +133,21 @@ public class TeacherServiceImpl extends UnicastRemoteObject implements TeacherSe
         return teachers;
     }
 
+    @Override
+    public int getTeacherCount() throws RemoteException {
+        String sql = "SELECT COUNT(*) FROM tbl_teacher";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RemoteException("Lỗi khi lấy số lượng giảng viên", e);
+        }
+        return 0;
+    }
+
 
 }
